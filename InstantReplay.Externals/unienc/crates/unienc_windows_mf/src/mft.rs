@@ -201,13 +201,12 @@ fn enum_mft(
     };
 
     let activates = if num_activate > 0 {
-        let activates = unsafe {
+        unsafe {
             std::slice::from_raw_parts_mut(activate, num_activate as usize)
                 .iter_mut()
                 .filter_map(Option::take)
                 .collect::<Vec<_>>()
-        };
-        activates
+        }
     } else {
         vec![]
     };

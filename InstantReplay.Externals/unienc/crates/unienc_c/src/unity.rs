@@ -2,7 +2,7 @@ use crate::platform::PlatformEncodingSystem;
 use crate::*;
 use std::os::raw::{c_int, c_void};
 use unienc::unity::UnityPlugin;
-use unienc::{EncodingSystem, GraphicsEventIssuer};
+use unienc::GraphicsEventIssuer;
 use unity_native_plugin::graphics::RenderingEventAndData;
 
 pub type UniencIssueGraphicsEventCallback = unsafe extern "C" fn(
@@ -130,7 +130,6 @@ mod entry_points {
 // we add `unienc_` prefix to avoid name collision with other plugins
 #[cfg(target_os = "ios")]
 mod entry_points {
-    use crate::platform::PlatformEncodingSystem;
     use std::ffi::c_void;
     #[unsafe(no_mangle)]
     #[allow(non_snake_case)]

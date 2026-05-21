@@ -13,7 +13,7 @@ pub unsafe extern "C" fn unienc_new_encoding_system(
     audio_options: *const AudioEncoderOptionsNative,
 ) -> *mut PlatformEncodingSystem {
     unsafe {
-        let _guard = unsafe { runtime.as_ref() }.unwrap().enter();
+        let _guard = runtime.as_ref().unwrap().enter();
         let system = PlatformEncodingSystem::new(&*video_options, &*audio_options, RuntimeSpawner);
         Box::into_raw(Box::new(system))
     }
