@@ -25,6 +25,7 @@ use std::{
     cell::{Cell, RefCell},
     future::Future,
     ptr::NonNull,
+    rc::Rc,
     sync::{Arc, Mutex, OnceLock},
 };
 use tokio::sync::oneshot;
@@ -662,7 +663,7 @@ pub(crate) fn custom_blit(
 
             let (tx, rx) = oneshot::channel();
 
-            let cell = Arc::new(RefCell::new(None));
+            let cell = Rc::new(RefCell::new(None));
             let cell_clone = cell.clone();
 
             fn fnonce_to_fn<Args>(closure: impl FnOnce(Args)) -> impl Fn(Args) {
