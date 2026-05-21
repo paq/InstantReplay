@@ -45,6 +45,7 @@ pub unsafe extern "C" fn unienc_video_encoder_push_shared_buffer(
 
 #[unsafe(no_mangle)]
 #[allow(dead_code)]
+#[cfg_attr(not(feature = "unity"), allow(unused_variables))]
 pub unsafe extern "C" fn unienc_video_encoder_push_blit_source(
     runtime: *mut Runtime,
     input: SendPtr<Mutex<Option<VideoEncoderInput>>>,

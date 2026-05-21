@@ -1,4 +1,5 @@
 use blocking::unblock;
+#[cfg(not(feature = "multi-thread"))]
 use futures::executor::LocalPool;
 use futures::task::{SpawnExt, noop_waker_ref};
 use std::cell::RefCell;
@@ -25,10 +26,12 @@ pub struct Runtime {
 }
 
 #[derive(Clone)]
+#[cfg_attr(not(feature = "unity"), allow(dead_code))]
 pub struct WeakRuntime {
     executor: Weak<Executor>,
 }
 
+#[cfg_attr(not(feature = "unity"), allow(dead_code))]
 impl WeakRuntime {
     pub fn upgrade(&self) -> Option<Runtime> {
         self.executor.upgrade().map(|executor| Runtime { executor })
@@ -40,10 +43,12 @@ type Executor = futures::executor::ThreadPool;
 #[cfg(not(feature = "multi-thread"))]
 type Executor = LocalExecutor;
 
+#[cfg(not(feature = "multi-thread"))]
 struct LocalExecutor {
     pool: Mutex<LocalPool>,
 }
 
+#[cfg(not(feature = "multi-thread"))]
 impl LocalExecutor {
     fn new() -> Self {
         let pool = LocalPool::new();
@@ -142,6 +147,7 @@ impl Runtime {
         }
     }
 
+    #[cfg_attr(not(feature = "unity"), allow(dead_code))]
     pub fn weak(&self) -> WeakRuntime {
         WeakRuntime {
             executor: Arc::downgrade(&self.executor),
