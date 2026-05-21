@@ -127,6 +127,7 @@ impl UniencError {
     }
 
     // Specific error constructors for each error category
+    #[allow(dead_code)]
     pub fn initialization_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::InitializationError,
@@ -134,6 +135,7 @@ impl UniencError {
         }
     }
 
+    #[allow(dead_code)]
     pub fn configuration_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::ConfigurationError,
@@ -141,6 +143,7 @@ impl UniencError {
         }
     }
 
+    #[allow(dead_code)]
     pub fn resource_allocation_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::ResourceAllocationError,
@@ -148,6 +151,7 @@ impl UniencError {
         }
     }
 
+    #[allow(dead_code)]
     pub fn encoding_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::EncodingError,
@@ -155,6 +159,7 @@ impl UniencError {
         }
     }
 
+    #[allow(dead_code)]
     pub fn muxing_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::MuxingError,
@@ -162,6 +167,7 @@ impl UniencError {
         }
     }
 
+    #[allow(dead_code)]
     pub fn communication_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::CommunicationError,
@@ -169,6 +175,7 @@ impl UniencError {
         }
     }
 
+    #[allow(dead_code)]
     pub fn timeout_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::TimeoutError,
@@ -176,6 +183,7 @@ impl UniencError {
         }
     }
 
+    #[allow(dead_code)]
     pub fn invalid_input_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::InvalidInput,
@@ -183,6 +191,7 @@ impl UniencError {
         }
     }
 
+    #[allow(dead_code)]
     pub fn platform_error(msg: impl Into<String>) -> Self {
         Self {
             kind: UniencErrorKind::PlatformError,
