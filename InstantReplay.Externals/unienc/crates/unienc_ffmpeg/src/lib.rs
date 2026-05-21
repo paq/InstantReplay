@@ -38,7 +38,7 @@ impl<
     type BlitSourceType = UnsupportedBlitData;
     type RuntimeType = R;
 
-    fn new(video_options: &V, audio_options: &A, runtime: R) -> Self {
+    fn new(video_options: &V, audio_options: &A, _runtime: R) -> Self {
         Self {
             video_options: *video_options,
             audio_options: *audio_options,

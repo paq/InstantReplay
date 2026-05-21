@@ -32,7 +32,7 @@ impl FFmpegMuxer {
     pub fn new<P: AsRef<Path>>(
         output_path: P,
         video_options: &impl unienc_common::VideoEncoderOptions,
-        audio_options: &impl unienc_common::AudioEncoderOptions,
+        _audio_options: &impl unienc_common::AudioEncoderOptions,
     ) -> Result<Self> {
         // raw H.264 frame cannot have timestamp, so we need to assume CFR (encoder also supports CFR)
         let mut ffmpeg = ffmpeg::Builder::new()

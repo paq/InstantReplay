@@ -28,7 +28,7 @@ pub struct VideoToolboxEncodingSystem<
 > {
     video_options: V,
     audio_options: A,
-    runtime: R,
+    _runtime: R,
 }
 
 impl<
@@ -53,7 +53,7 @@ impl<
         Self {
             video_options: *video_options,
             audio_options: *audio_options,
-            runtime,
+            _runtime: runtime,
         }
     }
 
