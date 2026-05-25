@@ -43,8 +43,8 @@ jobs:
       - run: rustup default stable
       - run: rustup component add clippy
       - run: rustup target add ${{ matrix.arch }}-pc-windows-msvc
-      - run: cargo clippy --target ${{ matrix.arch }}-pc-windows-msvc -p unienc_c ${{ matrix.variant == 'unity' && '-F mimalloc' || '' }} -- -D warnings
       - run: cargo test --target ${{ matrix.arch }}-pc-windows-msvc -p unienc_c ${{ matrix.variant == 'unity' && '-F mimalloc' || '' }} --no-run
+      - run: cargo clippy --target ${{ matrix.arch }}-pc-windows-msvc -p unienc_c ${{ matrix.variant == 'unity' && '-F mimalloc' || '' }} -- -D warnings
 
   test-android:
     name: Test unienc (Android ${{ matrix.triple }}, ${{ matrix.variant }})
@@ -66,8 +66,8 @@ jobs:
       - run: sudo apt update && sudo apt install -y gcc-multilib
       - run: echo "ANDROID_NDK_HOME=$(echo $ANDROID_NDK_LATEST_HOME)" >> $GITHUB_ENV
       - run: cargo install cargo-ndk
-      - run: cargo ndk -t ${{ matrix.triple }} --platform 26 clippy -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} -- -D warnings
       - run: cargo ndk -t ${{ matrix.triple }} --platform 26 test -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} --no-run
+      - run: cargo ndk -t ${{ matrix.triple }} --platform 26 clippy -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} -- -D warnings
 
   test-macos:
     name: Test unienc (macOS ${{ matrix.arch }}, ${{ matrix.variant }})
@@ -86,8 +86,8 @@ jobs:
       - run: rustup default stable
       - run: rustup component add clippy
       - run: rustup target add ${{ matrix.arch }}-apple-darwin
-      - run: cargo clippy --target ${{ matrix.arch }}-apple-darwin -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} -- -D warnings
       - run: cargo test --target ${{ matrix.arch }}-apple-darwin -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} --no-run
+      - run: cargo clippy --target ${{ matrix.arch }}-apple-darwin -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} -- -D warnings
 
   test-ios:
     name: Test unienc (iOS ${{ matrix.arch }}, ${{ matrix.variant }})
@@ -106,8 +106,8 @@ jobs:
       - run: rustup default stable
       - run: rustup component add clippy
       - run: rustup target add ${{ matrix.arch }}-apple-ios
-      - run: cargo clippy --target ${{ matrix.arch }}-apple-ios -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} -- -D warnings
       - run: cargo test --target ${{ matrix.arch }}-apple-ios -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} --no-run
+      - run: cargo clippy --target ${{ matrix.arch }}-apple-ios -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} -- -D warnings
 
   test-linux:
     name: Test unienc (Linux, ${{ matrix.variant }})
@@ -127,8 +127,8 @@ jobs:
       - run: rustup component add clippy
       - run: rustup target add ${{ matrix.arch }}-unknown-linux-gnu
       - run: sudo apt update && sudo apt install -y gcc-multilib
-      - run: cargo clippy --target ${{ matrix.arch }}-unknown-linux-gnu -p unienc_c ${{ matrix.variant == 'unity' && '-F mimalloc' || '' }} -- -D warnings
       - run: cargo test --target ${{ matrix.arch }}-unknown-linux-gnu -p unienc_c ${{ matrix.variant == 'unity' && '-F mimalloc' || '' }} --no-run
+      - run: cargo clippy --target ${{ matrix.arch }}-unknown-linux-gnu -p unienc_c ${{ matrix.variant == 'unity' && '-F mimalloc' || '' }} -- -D warnings
 
   test-wasm:
     name: Test unienc (WebAssembly, Unity)
@@ -142,5 +142,5 @@ jobs:
           submodules: 'recursive'
       - run: rustup default stable
       - run: rustup toolchain install nightly --component clippy,rust-src --target wasm32-unknown-emscripten
-      - run: RUSTFLAGS=-Ctarget-cpu=mvp cargo +nightly clippy -Z build-std=panic_abort,std --target wasm32-unknown-emscripten --no-default-features -p unienc_c -- -D warnings
       - run: RUSTFLAGS=-Ctarget-cpu=mvp cargo +nightly test -Z build-std=panic_abort,std --target wasm32-unknown-emscripten --no-default-features -p unienc_c --no-run
+      - run: RUSTFLAGS=-Ctarget-cpu=mvp cargo +nightly clippy -Z build-std=panic_abort,std --target wasm32-unknown-emscripten --no-default-features -p unienc_c -- -D warnings
