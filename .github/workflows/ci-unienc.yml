@@ -24,3 +24,118 @@ jobs:
       - run: rustup default stable
       - run: rustup component add rustfmt
       - run: cargo fmt --all -- --check
+
+  test-windows:
+    name: Test (Windows, ${{ matrix.variant }})
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        variant: [unity, nuget]
+        arch: [x86_64]
+    defaults:
+      run:
+        working-directory: InstantReplay.Externals/unienc
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: 'recursive'
+      - run: rustup default stable
+      - run: rustup component add clippy
+      - run: rustup target add ${{ matrix.arch }}-pc-windows-msvc
+      - run: cargo test --target ${{ matrix.arch }}-pc-windows-msvc -p unienc_c ${{ matrix.variant == 'unity' && '-F mimalloc' || '' }} --no-run
+
+  test-android:
+    name: Test (Android ${{ matrix.triple }}, ${{ matrix.variant }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant: [unity, nuget]
+        triple: [aarch64-linux-android, x86_64-linux-android]
+    defaults:
+      run:
+        working-directory: InstantReplay.Externals/unienc
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: 'recursive'
+      - run: rustup default stable
+      - run: rustup component add clippy
+      - run: rustup target add ${{ matrix.triple }}
+      - run: sudo apt update && sudo apt install -y gcc-multilib
+      - run: echo "ANDROID_NDK_HOME=$(echo $ANDROID_NDK_LATEST_HOME)" >> $GITHUB_ENV
+      - run: cargo install cargo-ndk
+      - run: cargo ndk -t ${{ matrix.triple }} --platform 26 test -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} --no-run
+
+  test-macos:
+    name: Test (macOS ${{ matrix.arch }}, ${{ matrix.variant }})
+    runs-on: macos-15
+    strategy:
+      matrix:
+        variant: [unity, nuget]
+        arch: [aarch64, x86_64]
+    defaults:
+      run:
+        working-directory: InstantReplay.Externals/unienc
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: 'recursive'
+      - run: rustup default stable
+      - run: rustup component add clippy
+      - run: rustup target add ${{ matrix.arch }}-apple-darwin
+      - run: cargo test --target ${{ matrix.arch }}-apple-darwin -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} --no-run
+
+  test-ios:
+    name: Test (iOS ${{ matrix.arch }}, ${{ matrix.variant }})
+    runs-on: macos-15
+    strategy:
+      matrix:
+        variant: [unity, nuget]
+        arch: [aarch64]
+    defaults:
+      run:
+        working-directory: InstantReplay.Externals/unienc
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: 'recursive'
+      - run: rustup default stable
+      - run: rustup component add clippy
+      - run: rustup target add ${{ matrix.arch }}-apple-ios
+      - run: cargo test --target ${{ matrix.arch }}-apple-ios -p unienc_c ${{ matrix.variant == 'unity' && '-F unity,mimalloc' || '' }} --no-run
+
+  test-linux:
+    name: Test (Linux, ${{ matrix.variant }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant: [unity, nuget]
+        arch: [x86_64]
+    defaults:
+      run:
+        working-directory: InstantReplay.Externals/unienc
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: 'recursive'
+      - run: rustup default stable
+      - run: rustup component add clippy
+      - run: rustup target add ${{ matrix.arch }}-unknown-linux-gnu
+      - run: sudo apt update && sudo apt install -y gcc-multilib
+      - run: cargo test --target ${{ matrix.arch }}-unknown-linux-gnu -p unienc_c ${{ matrix.variant == 'unity' && '-F mimalloc' || '' }} --no-run
+
+  test-wasm:
+    name: Test (WebAssembly, Unity)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: InstantReplay.Externals/unienc
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: 'recursive'
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y emscripten
+      - run: rustup default stable
+      - run: rustup toolchain install nightly --component clippy,rust-src --target wasm32-unknown-emscripten
+      - run: RUSTFLAGS=-Ctarget-cpu=mvp cargo +nightly test -Z build-std=panic_abort,std --target wasm32-unknown-emscripten --no-default-features -p unienc_c --no-run
